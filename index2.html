@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Martingale Beta | Professional Betting Strategy Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.4)), url('landingbg1.gif');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .positioned-buttons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+        }
+
+        .positioned-btn {
+            position: absolute;
+            padding: 20px 55px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border: 3px solid;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        .positioned-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Login button - Top left (red building area) */
+        /* ADJUST: Change top/left values to position on your red building */
+        .login-positioned {
+            top: 35%;           /* ← CHANGE THIS: 0% = top, 100% = bottom */
+            left: 8%;          /* ← CHANGE THIS: 0% = left edge, 100% = right edge */
+            transform: none;    /* No transform applied */
+            color: #ff3366;
+            border-color: #ff3366;
+            box-shadow: 0 0 30px rgba(255, 51, 102, 0.6), inset 0 0 20px rgba(255, 51, 102, 0.1);
+            text-shadow: 0 0 10px #ff3366;
+        }
+
+        .login-positioned:hover {
+            background: rgba(255, 51, 102, 0.2);
+            box-shadow: 0 0 50px rgba(255, 51, 102, 0.8), inset 0 0 30px rgba(255, 51, 102, 0.2);
+            transform: scale(1.1);
+        }
+
+        /* Guide button - Top right (blue building area) */
+        /* ADJUST: Change top/left values to position on your blue building */
+        .guide-positioned {
+            top: 35%;           /* ← CHANGE THIS: 0% = top, 100% = bottom */
+            left: 75%;          /* ← CHANGE THIS: 0% = left edge, 100% = right edge */
+            transform: none;    /* No transform applied */
+            color: #00ffaa;
+            border-color: #00ffaa;
+            box-shadow: 0 0 30px rgba(0, 255, 170, 0.6), inset 0 0 20px rgba(0, 255, 170, 0.1);
+            text-shadow: 0 0 10px #00ffaa;
+        }
+
+        .guide-positioned:hover {
+            background: rgba(0, 255, 170, 0.2);
+            box-shadow: 0 0 50px rgba(0, 255, 170, 0.8), inset 0 0 30px rgba(0, 255, 170, 0.2);
+            transform: scale(1.1);
+        }
+
+        /* Join button - Center bottom (below Martingale logo area) */
+        /* ADJUST: Change top/left values to position below logo */
+        .join-positioned {
+            top: 65%;           /* ← CHANGE THIS: 0% = top, 100% = bottom */
+            left: 50%;          /* ← CHANGE THIS: 0% = left edge, 100% = right edge */
+            transform: translateX(-50%);  /* Keeps button centered on its left position */
+            color: #ff00ff;
+            border-color: #ff00ff;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.6), inset 0 0 20px rgba(255, 0, 255, 0.1);
+            text-shadow: 0 0 10px #ff00ff;
+            font-size: 28px;
+            padding: 24px 65px;
+            animation: pulseGlow 2s infinite;
+        }
+
+        .join-positioned:hover {
+            background: rgba(255, 0, 255, 0.2);
+            box-shadow: 0 0 50px rgba(255, 0, 255, 0.8), inset 0 0 30px rgba(255, 0, 255, 0.2);
+            animation: none;
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(255, 0, 255, 0.6), inset 0 0 20px rgba(255, 0, 255, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 60px rgba(255, 0, 255, 0.9), 0 0 80px rgba(255, 0, 255, 0.6), inset 0 0 30px rgba(255, 0, 255, 0.2);
+            }
+        }
+
+        .overlay-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 0, 255, 0.03) 2px,
+                rgba(255, 0, 255, 0.03) 4px
+            );
+            pointer-events: none;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 0, 255, 0.2);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #ff0080);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ff00ff;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 72px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ff00ff, #ff0080, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(255, 0, 255, 0.6)); }
+            50% { filter: drop-shadow(0 0 40px rgba(255, 0, 255, 0.9)); }
+        }
+
+        .beta-tag {
+            display: inline-block;
+            padding: 6px 20px;
+            background: rgba(0, 255, 170, 0.2);
+            border: 2px solid #00ffaa;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #00ffaa;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+
+        .tagline {
+            font-size: 24px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 50px;
+            letter-spacing: 1px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 80px;
+        }
+
+        .btn {
+            padding: 18px 50px;
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff00ff, #ff0080);
+            color: #fff;
+            box-shadow: 0 10px 40px rgba(255, 0, 255, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(255, 0, 255, 0.6);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #00ffaa;
+            border: 2px solid #00ffaa;
+            box-shadow: 0 10px 40px rgba(0, 255, 170, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 255, 170, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(0, 255, 170, 0.4);
+        }
+
+        .btn-tertiary {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-tertiary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .info-section {
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a0a1a 100%);
+            padding: 100px 20px;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ff00ff, #00ffaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 60px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .strategy-explanation {
+            max-width: 900px;
+            margin: 0 auto 60px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 50px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 0, 255, 0.2);
+        }
+
+        .strategy-explanation h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            color: #ff00ff;
+            margin-bottom: 25px;
+        }
+
+        .strategy-explanation p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 20px;
+        }
+
+        .example-table {
+            width: 100%;
+            max-width: 700px;
+            margin: 40px auto;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .example-table th {
+            background: linear-gradient(135deg, #ff00ff, #ff0080);
+            padding: 18px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .example-table td {
+            padding: 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 17px;
+        }
+
+        .example-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .example-table tr:hover {
+            background: rgba(255, 0, 255, 0.05);
+        }
+
+        .win-row {
+            background: rgba(0, 255, 170, 0.1);
+            font-weight: 600;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 0, 255, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 0, 255, 0.5);
+            box-shadow: 0 20px 60px rgba(255, 0, 255, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #00ffaa;
+        }
+
+        .feature-card p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .pricing-section {
+            background: linear-gradient(180deg, #1a0a1a 0%, #0a0a1a 100%);
+            padding: 100px 20px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 50px 40px;
+            border-radius: 25px;
+            border: 2px solid rgba(255, 0, 255, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 0, 255, 0.6);
+            box-shadow: 0 25px 70px rgba(255, 0, 255, 0.3);
+        }
+
+        .pricing-card.recommended {
+            border-color: #00ffaa;
+            background: rgba(0, 255, 170, 0.05);
+        }
+
+        .pricing-card.recommended:hover {
+            border-color: #00ffaa;
+            box-shadow: 0 25px 70px rgba(0, 255, 170, 0.3);
+        }
+
+        .recommended-badge {
+            position: absolute;
+            top: -15px;
+            right: 30px;
+            background: linear-gradient(135deg, #00ffaa, #00cc88);
+            color: #000;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pricing-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #ff00ff;
+        }
+
+        .pricing-card.recommended h3 {
+            color: #00ffaa;
+        }
+
+        .price {
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ff00ff, #ff0080);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-card.recommended .price {
+            background: linear-gradient(135deg, #00ffaa, #00cc88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .price-period {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 30px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 12px 0;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-note {
+            background: rgba(0, 255, 170, 0.1);
+            border-left: 3px solid #00ffaa;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.85);
+            text-align: left;
+            border-radius: 5px;
+        }
+
+        .refund-section {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 60px 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 0, 255, 0.2);
+            max-width: 1000px;
+            margin: 80px auto 0;
+        }
+
+        .refund-section h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            color: #ff00ff;
+            margin-bottom: 30px;
+        }
+
+        .refund-conditions {
+            text-align: left;
+            margin-top: 30px;
+        }
+
+        .refund-conditions h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            color: #00ffaa;
+            margin: 25px 0 15px;
+        }
+
+        .refund-conditions p,
+        .refund-conditions ul {
+            font-size: 16px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 15px;
+        }
+
+        .refund-conditions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .refund-conditions ul li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .refund-conditions ul li:before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: #ff00ff;
+            font-size: 20px;
+        }
+
+        .stats-section {
+            background: linear-gradient(180deg, #0a0a1a 0%, #1a0a1a 100%);
+            padding: 100px 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 60px auto 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 0, 255, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 0, 255, 0.5);
+        }
+
+        .stat-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ff00ff, #00ffaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .stat-label {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .how-it-works-section {
+            background: linear-gradient(180deg, #1a0a1a 0%, #0a0a0a 100%);
+            padding: 100px 20px;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 60px auto 0;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 0, 255, 0.2);
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -25px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff00ff, #ff0080);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 900;
+            box-shadow: 0 10px 30px rgba(255, 0, 255, 0.4);
+        }
+
+        .step-card h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            color: #00ffaa;
+            margin: 20px 0 15px;
+        }
+
+        .step-card p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .testimonial-section {
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a0a1a 100%);
+            padding: 100px 20px;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 60px auto 0;
+        }
+
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 0, 255, 0.2);
+            position: relative;
+        }
+
+        .quote-icon {
+            font-size: 48px;
+            color: rgba(255, 0, 255, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .testimonial-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff00ff, #00ffaa);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .author-info h5 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            color: #00ffaa;
+            margin-bottom: 5px;
+        }
+
+        .author-info p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, rgba(255, 0, 255, 0.1), rgba(0, 255, 170, 0.1));
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #ff00ff, #00ffaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cta-section p {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        footer {
+            background: #000;
+            padding: 60px 20px 30px;
+            border-top: 1px solid rgba(255, 0, 255, 0.2);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            color: #ff00ff;
+            margin-bottom: 20px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: #00ffaa;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-bottom p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+
+        .disclaimer {
+            background: rgba(255, 0, 0, 0.1);
+            border-left: 3px solid #ff0066;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: left;
+        }
+
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 48px;
+                letter-spacing: 4px;
+            }
+
+            .tagline {
+                font-size: 18px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 350px;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+
+            .strategy-explanation {
+                padding: 30px 20px;
+            }
+
+            .example-table {
+                font-size: 14px;
+            }
+
+            .example-table th,
+            .example-table td {
+                padding: 12px 8px;
+            }
+
+            .pricing-grid,
+            .steps-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            /* Adjust positioned buttons for mobile */
+            .positioned-btn {
+                font-size: 16px;
+                padding: 14px 35px;
+            }
+
+            /* MOBILE: Adjust these positions for mobile screens */
+            .login-positioned {
+                top: 30%;        /* ← CHANGE THIS for mobile */
+                left: 8%;        /* ← CHANGE THIS for mobile */
+            }
+
+            .guide-positioned {
+                top: 30%;        /* ← CHANGE THIS for mobile */
+                left: 65%;       /* ← CHANGE THIS for mobile */
+            }
+
+            .join-positioned {
+                font-size: 20px;
+                padding: 16px 45px;
+                top: 60%;        /* ← CHANGE THIS for mobile */
+                left: 50%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="nav-logo">MARTINGALE</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#strategy">Strategy</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#login">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="hero-section">
+        <div class="overlay-pattern"></div>
+        
+        <!-- Positioned Buttons Overlay -->
+        <div class="positioned-buttons">
+            <!-- Login button - positioned on red building (left side) -->
+            <button class="btn positioned-btn login-positioned" onclick="window.location.href='#login'">Login</button>
+            
+            <!-- Guide button - positioned on blue building (right side) -->
+            <button class="btn positioned-btn guide-positioned" onclick="document.getElementById('strategy').scrollIntoView({behavior: 'smooth'})">Guide</button>
+            
+            <!-- Join button - positioned below Martingale logo (center) -->
+            <button class="btn positioned-btn join-positioned" onclick="document.getElementById('pricing').scrollIntoView({behavior: 'smooth'})">Join Now</button>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="container">
+            <h2 class="section-title">Proven Results</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Active Members</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2.3x</div>
+                    <div class="stat-label">Average ROI</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Support</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="strategy" class="info-section">
+        <div class="container">
+            <h2 class="section-title">The Martingale Strategy</h2>
+            <p class="section-subtitle">A mathematical approach to betting that ensures recovery of all losses with a single win</p>
+            
+            <div class="strategy-explanation">
+                <h3>How It Works</h3>
+                <p>The Martingale strategy is a progressive betting system where you double your stake after every loss. This method requires each bet to have odds of at least 2x (or 2.0), ensuring you win double your stake amount.</p>
+                
+                <p>With just one win, you recover your entire cumulative loss and profit an amount equal to your initial stake. This elegant mathematical principle has been used by professional bettors for centuries.</p>
+
+                <table class="example-table">
+                    <thead>
+                        <tr>
+                            <th>Bet #</th>
+                            <th>Stake</th>
+                            <th>Result</th>
+                            <th>Total Invested</th>
+                            <th>Net Profit/Loss</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>$10</td>
+                            <td>❌ Loss</td>
+                            <td>$10</td>
+                            <td>-$10</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>$20</td>
+                            <td>❌ Loss</td>
+                            <td>$30</td>
+                            <td>-$30</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>$40</td>
+                            <td>❌ Loss</td>
+                            <td>$70</td>
+                            <td>-$70</td>
+                        </tr>
+                        <tr class="win-row">
+                            <td>4</td>
+                            <td>$80</td>
+                            <td>✅ Win</td>
+                            <td>$150</td>
+                            <td>+$10</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Result:</strong> After three losses and one win at 2x odds, you've recovered all $70 in losses and earned a $10 profit (your initial stake amount).</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Automated Tracking</h3>
+                    <p>Monitor your betting progression with real-time analytics and automatic stake calculations.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Expert Picks</h3>
+                    <p>Receive professionally analyzed betting picks with 2x or higher odds, delivered directly to your dashboard.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Secure Platform</h3>
+                    <p>Enterprise-grade security ensures your data and betting strategies remain private and protected.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works-section">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Get started in four simple steps</p>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h4>Subscribe</h4>
+                    <p>Choose your preferred subscription package and create your account.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h4>Receive Picks</h4>
+                    <p>Get daily betting picks with detailed analysis and recommended stakes based on the Martingale strategy.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h4>Place Bets</h4>
+                    <p>Follow our expert recommendations and place your bets with confidence using the Martingale system.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h4>Track & Profit</h4>
+                    <p>Monitor your progress through our dashboard and watch your profits grow systematically.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="pricing-section">
+        <div class="container">
+            <h2 class="section-title">Pricing & Plans</h2>
+            <p class="section-subtitle">Choose the package that suits your betting strategy</p>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Weekly Plan</h3>
+                    <div class="price">$50</div>
+                    <div class="price-period">per week</div>
+                    
+                    <ul class="pricing-features">
+                        <li>✓ Daily betting picks</li>
+                        <li>✓ 2x+ odds guarantee</li>
+                        <li>✓ Email & SMS alerts</li>
+                        <li>✓ Basic analytics dashboard</li>
+                        <li>✓ 24/7 customer support</li>
+                    </ul>
+                    
+                    <div class="pricing-note">
+                        <strong>📌 Guarantee:</strong> If we fail to publish a betting pick within your subscribed week, you'll receive an additional week of subscription free of charge.
+                    </div>
+                    
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 30px;">Subscribe Now</button>
+                </div>
+                
+                <div class="pricing-card recommended">
+                    <div class="recommended-badge">Recommended</div>
+                    <h3>Monthly Plan</h3>
+                    <div class="price">$150</div>
+                    <div class="price-period">per month (4 weeks)</div>
+                    
+                    <ul class="pricing-features">
+                        <li>✓ All Weekly Plan features</li>
+                        <li>✓ <strong>$50 savings</strong> vs weekly</li>
+                        <li>✓ Priority pick delivery</li>
+                        <li>✓ Advanced analytics & insights</li>
+                        <li>✓ Dedicated account manager</li>
+                        <li>✓ Refund policy eligible</li>
+                    </ul>
+                    
+                    <div class="pricing-note">
+                        <strong>💎 Best Value:</strong> Save $50 compared to weekly subscriptions. Most members choose this plan for consistent results.
+                    </div>
+                    
+                    <button class="btn btn-secondary" style="width: 100%; margin-top: 30px;">Subscribe Now</button>
+                </div>
+            </div>
+            
+            <div class="refund-section">
+                <h3>🛡️ Refund Policy</h3>
+                <p style="font-size: 18px; line-height: 1.8; color: rgba(255, 255, 255, 0.85);">
+                    We stand behind our Martingale strategy with a comprehensive refund guarantee. If our strategy proves ineffective during your subscription period, you're protected.
+                </p>
+                
+                <div class="refund-conditions">
+                    <h4>Refund Eligibility Conditions:</h4>
+                    
+                    <ul>
+                        <li><strong>Six Consecutive Losses:</strong> If during your subscription period, our betting picks result in six consecutive losses within a single Martingale cycle (meaning your 6th bet in the cycle ends in a loss), you become eligible for a refund. This cycle is referred to as the "Loss Cycle."</li>
+                        
+                        <li><strong>Continuous Subscription Required:</strong> To qualify for a refund, you must maintain an uninterrupted subscription throughout your entire "Loss Cycle." This means you need to renew your subscription before your current period expires.</li>
+                        
+                        <li><strong>Calculation Method:</strong> Each week of your subscription during the "Loss Cycle" is considered individually at $50 per week. Your maximum refund amount equals the total subscription fees paid during your "Loss Cycle" period only.</li>
+                        
+                        <li><strong>Initial Week Exception:</strong> If the first week of your "Loss Cycle" includes a win from a previous Martingale cycle, that particular week will not be eligible for inclusion in your refund calculation.</li>
+                    </ul>
+                    
+                    <h4>Example Scenario:</h4>
+                    <p>If you experience a Loss Cycle spanning 3 weeks (6 consecutive losses), and you maintained continuous subscription throughout this period, you would be eligible for a refund of $150 (3 weeks × $50). However, if the first week included a prior cycle win, the refund would be $100 (2 weeks × $50).</p>
+                </div>
+            </div>
+            
+            <div class="disclaimer">
+                <strong>⚠️ Important Disclaimer:</strong> Betting and gambling involve financial risk. While the Martingale strategy is mathematically sound for recovery, it requires sufficient bankroll and disciplined execution. Past performance does not guarantee future results. Only bet what you can afford to lose. This service is for entertainment and educational purposes. We do not guarantee wins or profits. Please gamble responsibly and be aware of problem gambling resources in your area.
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonial-section">
+        <div class="container">
+            <h2 class="section-title">What Our Members Say</h2>
+            <p class="section-subtitle">Real results from real members</p>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="quote-icon">"</div>
+                    <p class="testimonial-text">The Martingale strategy finally makes sense with their expert picks. I've recovered from three consecutive losses and still came out profitable. The system works exactly as described.</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">M</div>
+                        <div class="author-info">
+                            <h5>Marcus Chen</h5>
+                            <p>Member since Jan 2025</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="quote-icon">"</div>
+                    <p class="testimonial-text">I was skeptical at first, but the transparency and the refund policy gave me confidence. Three months in, and I'm consistently profitable. The analytics dashboard is incredibly helpful.</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">S</div>
+                        <div class="author-info">
+                            <h5>Sarah Williams</h5>
+                            <p>Member since Nov 2024</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="quote-icon">"</div>
+                    <p class="testimonial-text">Best betting service I've ever used. The picks are solid, the strategy is mathematically proven, and customer support actually responds. Worth every penny of the monthly subscription.</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">J</div>
+                        <div class="author-info">
+                            <h5>James Rodriguez</h5>
+                            <p>Member since Oct 2024</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Start Your Winning Journey?</h2>
+            <p>Join hundreds of successful members who are using the Martingale strategy to bet smarter and profit consistently. Start your subscription today with our risk-free guarantee.</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary" onclick="document.getElementById('pricing').scrollIntoView({behavior: 'smooth'})">Get Started Now</button>
+                <button class="btn btn-tertiary" onclick="document.getElementById('strategy').scrollIntoView({behavior: 'smooth'})">Learn More</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Martingale Beta</h4>
+                <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px; line-height: 1.6;">
+                    Professional betting strategy platform powered by mathematical precision and expert analysis.
+                </p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#strategy">Strategy</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#login">Login</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Responsible Gambling</h4>
+                <ul>
+                    <li><a href="https://www.gambleaware.org" target="_blank">GambleAware.org</a></li>
+                    <li><a href="https://www.begambleaware.org" target="_blank">BeGambleAware.org</a></li>
+                    <li><a href="#">Problem Gambling Help</a></li>
+                    <li><a href="#">Set Limits</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 Martingale Beta. All rights reserved. | Gamble responsibly. 18+ only.</p>
+        </div>
+    </footer>
+</body>
+</html>
