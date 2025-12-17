@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+        *{
+            font-family: "Google Sans", sans-serif;
+            color: white;
+        }
+        :root{
+            --lg-container-width: 900px;
+            --md-container-width: 500px;
+            --sm-container-width: 300px;
+            --primary: rgb(42,1,97);
+        }
+        main{
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap:0px;
+        }
+
+
+        .fireworks{
+            width:100%;
+            display: none;
+        }
+
+        .landing{
+            width: 100%;
+        }
+
+        .fireworks img, .landing img{
+            width: 100%;
+        }
+
+        .container{
+            position: relative;
+            left:50%;
+            transform: translate(-50%,0);
+            width:var(--lg-container-width);
+            /* background-color:pink; */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            margin-top: 80px;
+        }
+        .content{
+            background-color: var(--primary);/* lightsalmon; */
+            margin: 0px;
+            padding-right: 80px;
+            flex:1;
+        }
+        .content h2{
+            font-size: 60px;
+            margin: 0;
+        }
+        .content p{
+            font-size: 25px;
+        }
+        .illustration{
+            /* background-color: red; */
+        }
+        .illustration img{
+            width:250px;
+            
+        }
+
+        @media screen and (max-width: 1080px){
+            .container{
+                width: var(--md-container-width);
+            }
+            .content{
+                padding-right: 20px;
+            }
+            .content h2{
+                font-size: 30px;
+            }
+            .content p{
+                font-size: 15px;
+            }
+            .illustration img{
+                width: 150px;
+            }
+            .fireworks{
+                display: block;
+            }
+            
+        }
+
+        @media screen and (max-width: 550px){
+            .container{
+                width: var(--sm-container-width);
+            }
+            .content{
+                padding-right: 10px;
+            }
+            .content h2{
+                font-size: 18px;
+            }
+            .content p{
+                font-size: 10px;
+            }
+            .illustration img{
+                width:100px;
+            }
+            .fireworks{
+                display: block;
+            }
+        }
+
+
+        .dice{
+            background-color: var(--primary);/*white;*/
+            position: relative;
+            left:50%;
+            transform: translate(-50%,0);
+            width: var(--lg-container-width);
+            margin-top: 50px;
+        }
+        .dice img{
+            width: 100%;
+        }
+
+        @media screen and (max-width: 1080px) {
+            .dice{
+                width: var(--md-container-width);
+            }
+        }
+        @media screen and (max-width: 550px) {
+            .dice{
+                width: var(--sm-container-width);
+            }
+        }
+
+        .banner{
+            /* background-color: yellow; */
+            position: relative;
+            left: 50%;
+            transform: translate(-50%,0);
+            width: var(--lg-container-width);
+            margin-top: 40px;
+            /* border: solid 10px red; */
+            container-type: inline-size
+        }
+        .bra{
+            /* background-color: yellow; */
+            /* position: relative;
+            left: 50%;
+            transform: translate(-50%,0); */
+            width: 100%;
+            margin-top: 40px;
+            /* border: solid 10px red; */
+            border:none;
+            
+        }
+        .banner img, .bra img{
+            width: 100%;
+        }
+        .banner-content{
+            color: white;
+            font-size: 2cqw;
+            position: absolute;
+            top:30%;
+            left:15%;
+            width:40%;
+        }
+        
+        
+
+        @media screen and (max-width: 1080px) {
+            .banner{
+                width: var(--md-container-width);
+            }
+
+        }
+        @media screen and (max-width: 550px) {
+            .banner{
+                width: var(--sm-container-width);
+            }
+        }
+
+        .woman{
+            /* background-color: yellow; */
+            position: relative;
+            left: 50%;
+            transform: translate(-50%,0);
+            width: 100%;
+            padding: 0px;
+            border:none;
+            /* margin-top: 0px; */
+            /* border: solid 10px; */
+        }
+        .woman img{
+            width: 100%;
+        }
+
+    </style>
+    
+</head>
+<body>
+    <main>
+        <div class="fireworks">
+            <img src="images/fireworks.gif" alt="">
+        </div>
+        <div class="landing">
+            <img src="images/mainbg.gif" alt="">
+        </div>
+        <div class="container">
+            <div class="content">
+                <h2>ABOUT US</h2>
+                <p>The Martingale Strategy is the only gambling strategy which guarantees bettors profit. At Martingale Bets, we use a highly confidential source, which when used accurately according to our strategy, guarantees you a win within four weeks.</p>
+            </div>
+            <div class="illustration">
+                <img src="images/coin.gif">
+            </div>
+        </div>
+        <div class="dice">
+            <img src="images/dice.gif">
+        </div>
+        <div class="banner">
+            <img src="images/banner.gif">
+            <div class="banner-content">
+                <p>In the 2 years of our business, we've encountered no losses whatsoever, with incredible profits each month. Follow our bets to increase your wealth. And don't take our word for it... If you incur a loss by following Martingale Bets, you shall receive full refund for your subscription.</p>
+            </div>
+        </div>
+        <div class="bra">
+            <img src="images/bra.png">
+        </div>
+        <div class="woman">
+            <img src="images/woman.gif">
+        </div>
+        
+    </main> 
+</body>
+</html>
